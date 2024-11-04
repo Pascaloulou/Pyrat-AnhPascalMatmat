@@ -18,7 +18,7 @@ from typing_extensions import *
 from numbers import *
 
 # PyRat imports
-from pyrat import Player, Maze, GameState, Action
+from pyrat import Player, Maze, GameState, Action, Graph
 
 #####################################################################################################################################################
 ###################################################################### CLASSES ######################################################################
@@ -61,7 +61,7 @@ class Dijkstra (Player):
 
         # Print phase of the game
         print("Constructor")
-
+       
     #############################################################################################################################################
     #                                                               PYRAT METHODS                                                               #
     #############################################################################################################################################
@@ -71,7 +71,7 @@ class Dijkstra (Player):
                         maze:       Maze,
                         game_state: GameState,
                       ) ->          None:
-
+        
         """
             This method redefines the method of the parent class.
             It is called once at the beginning of the game.
@@ -82,7 +82,7 @@ class Dijkstra (Player):
             Out:
                 * None.
         """
-
+        
         # Print phase of the game
         print("Preprocessing")
 
@@ -111,6 +111,50 @@ class Dijkstra (Player):
 
         # Return an action
         return Action.NOTHING
+
+    def traversal ( self:   Self,
+                    graph:  Graph,
+                    source: Integral
+                  ) ->      Tuple[Dict[Integral, Integral], Dict[Integral, Optional[Integral]]]:
+
+        """
+        This method performs a dijkstra traversal of a graph.
+        In:
+            * self:   Reference to the current object.
+            * graph:  The graph to traverse.
+            * source: The source vertex of the traversal.
+        Out:
+            * distances:     The distances from the source to each explored vertex.
+            * routing_table: The routing table, that is, the parent of each vertex in the traversal (None for the source).
+        """
+
+        # Initialize distances and routing table
+       """ 
+        
+        queue = [source]
+        vus = {source : True}"""
+        distances = {}
+        min_heap = heapq.heapify([(0,source)])
+        routing_table = {source: None}
+        # loop
+        while min_heap:
+            v, distance = heapq.heappop(min_heap)
+            distances[v] = distances.get(v, 0)
+            for neighbor in graph.get_neighbors(v):
+                """if neighbor not in vus:
+                    vus[neighbor] = True
+                    queue.append(neighbor)
+                    """
+                routing_table[neighbor] = v
+                distance_through_currentvertex = distance + graph[v][neighbor]
+                heapq.heapreplace(min_heap,(distance_through_currentvertex,neighbor))
+                distances[neighbor] =
+
+        return distances, routing_table
+
+
+
+
 
 #############################################################################################################################################
 
